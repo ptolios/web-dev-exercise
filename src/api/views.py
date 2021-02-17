@@ -3,6 +3,9 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
 
+def index(request):
+    return render(request, "index.html", {})
+
 def api(request):
     # This is the request to the '/api/sort' endpoint
     # The POST data to provide must be a JSON object
