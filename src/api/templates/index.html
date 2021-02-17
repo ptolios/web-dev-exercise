@@ -9,24 +9,27 @@
       rel="stylesheet"
     />
   </head>
-  <body class="h-screen">
+  <body class="h-screen mx-auto bg-gradient-to-b from-blue-700 to-blue-400">
     <div
-      class="grid place-content-center bg-gradient-to-b from-blue-400 to-blue-100 h-full"
+      class="flex flex-col items-center h-full w-full"
     >
-      <div class="text-3xl text-center text-white container mx-auto p-4">
+      <div class="text-3xl text-center text-white p-4 m-8">
         Sort Words
       </div>
       <form
-        class="flex flex-col align-center rounded-2xl bg-white p-4 shadow-lg"
+        id="sort-form"
+        method="post"
+        action="/api/sort"
+        class="flex flex-col rounded-2xl bg-white p-4 w-6/12 shadow-lg"
       >
-        <div class="flex m-4 align-center">
-          <label for="list" class="text-xl px-4">Enter one word per line</label>
+        {% csrf_token %}
+        <div class="flex my-4 mx-12 align-center">
+          <label for="list" class="text-xl pr-4">Enter one word per line</label>
           <textarea
             name="list"
-            id=""
-            cols="30"
+            id="textarea"
             rows="10"
-            class="focus:outline-none focus:ring focus:border-blue-300 bg-gray-200"
+            class="focus:outline-none focus:ring focus:border-blue-300 bg-gray-200 p-2"
           ></textarea>
         </div>
         <button
@@ -36,6 +39,72 @@
           Submit
         </button>
       </form>
+      <div id="sorted-list" class="invisible">
+        <div>These are the words alphabetically sorted....</div>
+        <ul id="sorted-ul">
+          <li class="bg-red-200 hidden" data-type="template"></li>
+        </ul>
+      </div>
     </div>
+    <script>
+      async function fetchData(postData, headers) {
+        const data = await fetch("/api/sort/", {
+          method: "POST",
+          body: JSON.stringify(postData),
+          headers: headers,
+        }).then((response) => {
+          return response.json()
+        });
+        showElement(document.getElementById("sorted-list"));
+        return data
+      }
+
+      function populateList(element, list) {
+        let templateEl = element.querySelector("li[data-type='template']");
+        list.forEach((item) => {
+          let li = templateEl.cloneNode();
+          li.innerHTML = item;
+          li.classList.remove("hidden");
+          li.removeAttribute("data-type")
+          element.appendChild(li);
+        });
+      };
+
+      function clearLiElements(element) {
+        let liElements = element.querySelectorAll("li:not([data-type='template'])");
+        liElements.forEach(item => {
+          item.remove();
+        })
+      }
+
+      function showElement(element) {
+        element.classList.remove("invisible");
+        element.classList.add("visible");
+      };
+
+      const formElement = document.getElementById("sort-form")
+      formElement.addEventListener("submit", async (event) => {
+        event.preventDefault()
+        // Create a list of words from the textarea values
+        const textareaElement = document.getElementById("textarea")
+        const wordList = { data: textareaElement.value.trim().split("\n") }
+        // Provide the headers to the request
+        const csrfToken = document.querySelector(
+          "input[name='csrfmiddlewaretoken']"
+        ).value
+        const headers = {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken,
+        }
+        // Get the data from the API endpoint
+        let sortedList = await fetchData(wordList, headers);
+        // Clear the list items from any previous response
+        // and then populate with the new items
+        let sortedUl = document.getElementById("sorted-ul");
+        clearLiElements(sortedUl);
+        populateList(sortedUl, sortedList);
+      });
+    </script>
   </body>
 </html>
