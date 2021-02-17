@@ -1,4 +1,5 @@
 import time
+import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
@@ -12,7 +13,10 @@ def api(request):
     # with a key named "data" that contains 
     # the list to be sorted
     if request.method == "POST":
-        result = request.POST.getlist("data")
+        # Since this is not form data we are receiving
+        # we have to use request.body NOT request.POST, see url below
+        # https://docs.djangoproject.com/en/3.1/ref/request-response/#django.http.HttpRequest.body
+        result = json.loads(request.body.decode("utf-8")).get("data", [])
         # simulate the delay of the response...
         print("Waiting....")
         time.sleep(2)
