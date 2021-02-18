@@ -9,13 +9,9 @@
       rel="stylesheet"
     />
   </head>
-  <body class="h-screen mx-auto bg-gradient-to-b from-blue-700 to-blue-400">
-    <div
-      class="flex flex-col items-center h-full w-full"
-    >
-      <div class="text-3xl text-center text-white p-4 m-8">
-        Sort Words
-      </div>
+  <body class="h-screen mx-auto bg-blue-700">
+    <div class="flex flex-col items-center h-full w-full">
+      <div class="text-3xl text-center text-white p-4 m-8">Sort Words</div>
       <form
         id="sort-form"
         method="post"
@@ -39,10 +35,15 @@
           Submit
         </button>
       </form>
-      <div id="sorted-list" class="invisible">
-        <div>These are the words alphabetically sorted....</div>
-        <ul id="sorted-ul">
-          <li class="bg-red-200 hidden" data-type="template"></li>
+      <div
+        id="sorted-list"
+        class="invisible rounded-xl p-4 m-4 bg-gray-200 shadow-md"
+      >
+        <div class="text-xl text-center p-4">
+          These are the words alphabetically sorted....
+        </div>
+        <ul id="sorted-ul" class="list-disc list-inside p-4">
+          <li class="hidden" data-type="template"></li>
         </ul>
       </div>
     </div>
@@ -53,10 +54,10 @@
           body: JSON.stringify(postData),
           headers: headers,
         }).then((response) => {
-          return response.json()
+          return response.json();
         });
         showElement(document.getElementById("sorted-list"));
-        return data
+        return data;
       }
 
       function populateList(element, list) {
@@ -65,38 +66,40 @@
           let li = templateEl.cloneNode();
           li.innerHTML = item;
           li.classList.remove("hidden");
-          li.removeAttribute("data-type")
+          li.removeAttribute("data-type");
           element.appendChild(li);
         });
-      };
+      }
 
       function clearLiElements(element) {
-        let liElements = element.querySelectorAll("li:not([data-type='template'])");
-        liElements.forEach(item => {
+        let liElements = element.querySelectorAll(
+          "li:not([data-type='template'])"
+        );
+        liElements.forEach((item) => {
           item.remove();
-        })
+        });
       }
 
       function showElement(element) {
         element.classList.remove("invisible");
         element.classList.add("visible");
-      };
+      }
 
-      const formElement = document.getElementById("sort-form")
+      const formElement = document.getElementById("sort-form");
       formElement.addEventListener("submit", async (event) => {
-        event.preventDefault()
+        event.preventDefault();
         // Create a list of words from the textarea values
-        const textareaElement = document.getElementById("textarea")
-        const wordList = { data: textareaElement.value.trim().split("\n") }
+        const textareaElement = document.getElementById("textarea");
+        const wordList = { data: textareaElement.value.trim().split("\n") };
         // Provide the headers to the request
         const csrfToken = document.querySelector(
           "input[name='csrfmiddlewaretoken']"
-        ).value
+        ).value;
         const headers = {
           Accept: "application/json",
           "Content-Type": "application/json",
           "X-CSRFToken": csrfToken,
-        }
+        };
         // Get the data from the API endpoint
         let sortedList = await fetchData(wordList, headers);
         // Clear the list items from any previous response
