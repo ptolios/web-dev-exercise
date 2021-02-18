@@ -1,27 +1,27 @@
-from django.test import Client, TestCase
+import json
+from django.test import TestCase
 
 from utils import quick_sort
 
 
 class TestApi(TestCase):
     def test_api_response(self):
-        client = Client()
-        post_data = {
-            "data": [
-                "scene",
-                "uncle",
-                "tale",
-                "aspect",
-                "disease",
-                "penalty",
-                "procedure",
-                "agreement",
-                "relationship",
-                "grocery",
-            ]
-        }
-        response = client.post("/api/sort/", post_data)
-        self.assertEqual(sorted(post_data["data"]), response.json())
+        post_data = [
+            "scene",
+            "uncle",
+            "tale",
+            "aspect",
+            "disease",
+            "penalty",
+            "procedure",
+            "agreement",
+            "relationship",
+            "grocery",
+        ]
+        response = self.client.post(
+            "/api/sort/", post_data, content_type="application/json"
+        )
+        self.assertEqual(sorted(post_data), response.json())
 
 
 class TestQuickSort(TestCase):
