@@ -1,6 +1,6 @@
 from django.test import Client, TestCase
-import json
-from pprint import pprint
+
+from utils import quick_sort
 
 
 class TestApi(TestCase):
@@ -17,8 +17,27 @@ class TestApi(TestCase):
                 "procedure",
                 "agreement",
                 "relationship",
-                "grocery"
+                "grocery",
             ]
         }
         response = client.post("/api/sort/", post_data)
         self.assertEqual(sorted(post_data["data"]), response.json())
+
+
+class TestQuickSort(TestCase):
+    def test_quicksort(self):
+        original: list = [
+            "scene",
+            "uncle",
+            "tale",
+            "aspect",
+            "disease",
+            "penalty",
+            "procedure",
+            "agreement",
+            "relationship",
+            "grocery",
+        ]
+        sorted_list: list = original.copy()
+        sorted_list = quick_sort(sorted_list, 0, len(sorted_list) - 1)
+        self.assertEqual(sorted(original), sorted_list)
