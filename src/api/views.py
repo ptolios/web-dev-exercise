@@ -11,14 +11,12 @@ def index(request):
 
 def api(request):
     # This is the request to the '/api/sort' endpoint
-    # The POST data to provide must be a JSON object
-    # with a key named "data" that contains 
-    # the list to be sorted
+    # The POST data to provide must be an array
     if request.method == "POST":
         # Since this is not form data we are receiving
         # we have to use request.body NOT request.POST, see url below
         # https://docs.djangoproject.com/en/3.1/ref/request-response/#django.http.HttpRequest.body
-        result = json.loads(request.body.decode("utf-8")).get("data", [])
+        result = json.loads(request.body.decode("utf-8"))
         # simulate the delay of the response...
         print("Waiting....")
         time.sleep(2)
