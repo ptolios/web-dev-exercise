@@ -3,6 +3,8 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
+from utils import quick_sort
+
 
 def index(request):
     return render(request, "index.html", {})
@@ -21,6 +23,6 @@ def api(request):
         print("Waiting....")
         time.sleep(2)
         print("Go!")
-        return JsonResponse(sorted(result), safe=False)
+        return JsonResponse(quick_sort(result, 0, len(result) - 1), safe=False)
     else:
         return HttpResponse("<h1>This API endpoint only accepts POST requests</h1>")
