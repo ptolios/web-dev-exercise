@@ -22,12 +22,14 @@ function updateText(element, text) {
 
 function disableButton(buttonElement) {
   buttonElement.disabled = true;
+  updateText(buttonElement, "Loading...");
   buttonElement.classList.add("opacity-50", "cursor-not-allowed");
   buttonElement.classList.remove("hover:bg-blue-700");
 }
 
 function enableButton(buttonElement) {
   buttonElement.disabled = false;
+  updateText(buttonElement, "Submit");
   buttonElement.classList.remove("opacity-50", "cursor-not-allowed");
   buttonElement.classList.add("hover:bg-blue-700");
 }
