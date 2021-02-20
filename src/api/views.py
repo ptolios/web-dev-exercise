@@ -1,6 +1,6 @@
 import time
 import json
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import render
 
 from utils import quick_sort
@@ -29,4 +29,4 @@ def api(request):
         else:
             return HttpResponseBadRequest()
     else:
-        return HttpResponse("<h1>This API endpoint only accepts POST requests</h1>")
+        return HttpResponseNotAllowed(["POST"], "<h1>This API endpoint only accepts POST requests</h1>")
