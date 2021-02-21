@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Junior Web Developer Exercise</title>
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="min-h-screen mx-auto bg-gradient-to-b from-blue-700 to-blue-500">
+    <div class="flex flex-col items-center h-full w-full">
+      <div class="text-3xl text-center text-white p-4 mt-4">Sort Words</div>
+      <form
+        id="sort-form"
+        method="post"
+        action="/api/sort"
+        class="flex flex-col rounded-2xl bg-white p-4 shadow-lg"
+        style="min-width: 50%"
+      >
+        {% csrf_token %}
+        <div class="flex flex-col my-4 mx-12 align-center">
+          <label for="list" class="text-xl p-4">Enter one word per line</label>
+          <textarea
+            name="list"
+            id="textarea"
+            rows="10"
+            class="focus:outline-none focus:ring focus:border-blue-300 bg-gray-200 p-2"
+          ></textarea>
+        </div>
+        <button
+          id="submit"
+          class="bg-blue-500 hover:bg-blue-700 rounded-xl mx-12 my-4 p-3 text-white shadow-md"
+          type="submit"
+        >
+          Submit
+        </button>
+      </form>
+      <div
+        id="sorted-list"
+        class="rounded-xl p-4 m-4 bg-gray-200 shadow-md"
+        style="min-width: 50%"
+      >
+        <div class="text-xl text-center p-4">
+          Hit submit to see the words alphabetically sorted....
+        </div>
+        <ul id="sorted-ul" class="list-disc list-inside p-4">
+          <li class="hidden" data-type="template"></li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>
